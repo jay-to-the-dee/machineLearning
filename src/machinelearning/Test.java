@@ -6,7 +6,7 @@ import java.util.HashSet;
 
 public class Test {
 
-	private String file = "./DataSets/CarEvaluation/car.data.txt/";
+	private final String file = "./DataSets/CarEvaluation/car.data.txt";
 	
 	/**
 	 * @param args
