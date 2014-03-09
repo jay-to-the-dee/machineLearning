@@ -37,12 +37,9 @@ public class Test
             }
             System.out.println();
         }
+        
         System.out.println(examples.size());
-
-        for (String label : labels)
-        {
-            ExampleSet ex = examples.getExamples(label);
-            System.out.println(label + " : " + ex.size());
-        }
+        
+        examples.printProbabilityInfo();
     }
 }

@@ -146,5 +146,13 @@ public class ExampleSet {
 		return values;
 	}
 	
-	
+    public void printProbabilityInfo()
+    {
+        for (String label : labels)
+        {
+            ExampleSet ex = getExamples(label);
+            System.out.print(label + " : " + ex.size()+ " : ");
+            System.out.println((float) ex.size() / size() * 100 + "%");
+        }
+    }
 }
