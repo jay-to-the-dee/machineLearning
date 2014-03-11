@@ -1,12 +1,13 @@
 package machinelearning;
 
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 
 public class Test
 {
 
     private final String file = "./DataSets/CarEvaluation/car.data.txt";
+    private Stack<String> feats;
+    private Stack<String> labels;
 
     /**
      * @param args
@@ -22,9 +23,11 @@ public class Test
     {
         ExampleSet examples = ExampleSet.getData(file);
 
-        String[] feats = examples.getFeatures();
+        feats = new Stack();
+        feats.addAll(Arrays.asList(examples.getFeatures()));
 
-        String[] labels = examples.getLabels();
+        labels = new Stack();
+        labels.addAll(Arrays.asList(examples.getLabels()));
 
         HashMap<String, HashSet<String>> values = examples.getValues();
         for (String f : feats)
@@ -37,9 +40,19 @@ public class Test
             }
             System.out.println();
         }
-        
+
         System.out.println(examples.size());
+
         
-        examples.printProbabilityInfo();
+        
+        String currentFeat = feats.pop();
+        HashSet<String> allCurrentFeatValues = values.get(currentFeat);
+        for (String currentValue : allCurrentFeatValues)
+        {
+            System.out.println("\ncurrentValue: " + currentValue);
+            ExampleSet currentIteration = examples.getExamples(currentFeat, currentValue);
+            currentIteration.printProbabilityInfo();
+        }
+
     }
 }
