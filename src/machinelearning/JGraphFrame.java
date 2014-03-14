@@ -16,16 +16,21 @@ public class JGraphFrame extends JFrame
 {
     private Graph g;
     private JGraph jgraph;
+    private final JGraphModelAdapter adapter;
 
     public JGraphFrame(Graph g)
     {
         super("Decision Tree Classifier");
         this.g = g;
-        jgraph = new JGraph(new JGraphModelAdapter(g));
-        jgraph.setPreferredSize(new Dimension(1024,768));
-        
+
+        adapter = new JGraphModelAdapter(g);
+
+        jgraph = new JGraph(adapter);
+        jgraph.setPreferredSize(new Dimension(1024, 768));
+
+        this.setExtendedState(this.getExtendedState() | JFrame.MAXIMIZED_BOTH);
         this.add(jgraph);
-        
+
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.pack();
         this.setVisible(true);

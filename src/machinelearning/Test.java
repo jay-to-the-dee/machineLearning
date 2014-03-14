@@ -11,6 +11,7 @@ public class Test
     private final String file = "./DataSets/CarEvaluation/car.data.txt";
     private Stack<String> feats;
     private Stack<String> labels;
+    private HashMap<String, HashSet<String>> values;
 
     private SimpleGraph<ExampleSet, String> g;
 
@@ -38,7 +39,7 @@ public class Test
         feats.addAll(Arrays.asList(examples.getFeatures()));
         labels.addAll(Arrays.asList(examples.getLabels()));
 
-        HashMap<String, HashSet<String>> values = examples.getValues();
+        values = examples.getValues();
         /*for (String f : feats)
          {
          System.out.print(f + " : ");
@@ -51,26 +52,34 @@ public class Test
          }*/
 
         //System.out.println(examples.size());
-        
-        
-        ExampleSet currentParent = examples;
-        
-        g.addVertex(currentParent);
-        String currentFeat = feats.pop();
-        
-        HashSet<String> allCurrentFeatValues = values.get(currentFeat);
+        g.addVertex(examples);
+        addFeatToGraph(examples, feats.pop());
+
+        //Visualise what we've added so far
+        JGraphFrame jGraphFrame = new JGraphFrame(g);
+    }
+
+    private void addFeatToGraph(ExampleSet parent, String feat)
+    {
+
+        HashSet<String> allCurrentFeatValues = values.get(feat);
+        String nextFeat = feats.pop();
         for (String currentValue : allCurrentFeatValues)
         {
             //System.out.println("\ncurrentValue: " + currentValue);
-            //g.
-            ExampleSet currentIteration = examples.getExamples(currentFeat, currentValue);
-            
+            ExampleSet currentIteration = parent.getExamples(feat, currentValue);
+
             g.addVertex(currentIteration);
-            g.addEdge(currentParent, currentIteration, currentValue);
-            
+            g.addEdge(parent, currentIteration, feat + ": " + currentValue);
+
+            if (feats.size() > 2)
+            {
+                addFeatToGraph(currentIteration, nextFeat);
+
+            }
+
             //currentIteration.printProbabilityInfo();
         }
-        
-        JGraphFrame jGraphFrame = new JGraphFrame(g);
     }
+
 }
