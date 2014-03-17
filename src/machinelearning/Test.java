@@ -9,7 +9,7 @@ public class Test
     private final String file = "./DataSets/CarEvaluation/car.data.txt";
     private Stack<String> feats;
     private Stack<String> labels;
-    private HashMap<String, HashSet<String>> values;
+    private HashMap<String, LinkedHashSet<String>> values;
 
     private SimpleGraph<ExampleSet, String> g;
 
@@ -59,8 +59,8 @@ public class Test
 
     private void addFeatToGraph(ExampleSet parent, String feat)
     {
-
-        HashSet<String> allCurrentFeatValues = values.get(feat);
+        LinkedHashSet<String> allCurrentFeatValues = values.get(feat);
+        
         for (String currentValue : allCurrentFeatValues)
         {
             //System.out.println("\ncurrentValue: " + currentValue);
@@ -71,7 +71,17 @@ public class Test
 
             if (feats.size() > 2)
             {
-                addFeatToGraph( currentIteration, feats.pop() );
+                String nextFeat;
+                //If last value
+                if (currentValue.equals( allCurrentFeatValues.toArray()[allCurrentFeatValues.size()-1] ) )
+                {
+                    nextFeat = feats.pop();
+                }
+                else
+                {
+                    nextFeat = feat;
+                }
+                addFeatToGraph( currentIteration, nextFeat );
             }
 
             //currentIteration.printProbabilityInfo();

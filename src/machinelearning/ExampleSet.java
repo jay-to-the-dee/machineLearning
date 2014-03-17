@@ -3,6 +3,7 @@ package machinelearning;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 /**
  * ExampleSet: class for representing set of train or test examples (labelled
@@ -17,7 +18,7 @@ public class ExampleSet
 
     private String[] features;
     private String[] labels;
-    private HashMap<String, HashSet<String>> values;
+    private HashMap<String, LinkedHashSet<String>> values;
     private ArrayList<Instance> examples;
     private int size;
 
@@ -32,8 +33,8 @@ public class ExampleSet
     {
         this.features = features;
         this.labels = labels;
-        examples = new ArrayList<Instance>();
-        values = new HashMap<String, HashSet<String>>();
+        examples = new ArrayList<>();
+        values = new HashMap<>();
         size = 0;
     }
 
@@ -78,7 +79,7 @@ public class ExampleSet
     {
         if (values.get(f) == null)
         {
-            values.put(f, new HashSet<String>());
+            values.put(f, new LinkedHashSet<String>());
         }
         values.get(f).add(v);
     }
@@ -170,7 +171,7 @@ public class ExampleSet
      *
      * @return a map from feature names to sets of values
      */
-    public HashMap<String, HashSet<String>> getValues()
+    public HashMap<String, LinkedHashSet<String>> getValues()
     {
         return values;
     }
