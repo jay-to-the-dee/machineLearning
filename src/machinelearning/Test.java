@@ -1,8 +1,6 @@
 package machinelearning;
 
 import java.util.*;
-import org.jgraph.JGraph;
-import org.jgrapht.ext.JGraphModelAdapter;
 import org.jgrapht.graph.*;
 
 public class Test
@@ -63,7 +61,6 @@ public class Test
     {
 
         HashSet<String> allCurrentFeatValues = values.get(feat);
-        String nextFeat = feats.pop();
         for (String currentValue : allCurrentFeatValues)
         {
             //System.out.println("\ncurrentValue: " + currentValue);
@@ -74,8 +71,7 @@ public class Test
 
             if (feats.size() > 2)
             {
-                addFeatToGraph(currentIteration, nextFeat);
-
+                addFeatToGraph( currentIteration, feats.pop() );
             }
 
             //currentIteration.printProbabilityInfo();
