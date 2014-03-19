@@ -56,7 +56,6 @@ public class Test
         LinkedHashSet<ExampleSet> exampleSet = new LinkedHashSet<>();
         addFeatToGraph(examples, feats);
 
-        //doSplitAndReturnNewParents(examples, feats.);
         //Visualise what we've added so far
         JGraphFrame jGraphFrame = new JGraphFrame(g);
 
@@ -91,7 +90,7 @@ public class Test
      }*/
     private void addFeatToGraph(ExampleSet parent, Stack<String> featStack)
     {
-        if (featStack.size() <= feats.size() - MAX_DEPTH)
+        if (featStack.empty() || featStack.size() <= feats.size() - MAX_DEPTH)
         {
             return; //End this recursion NOW!!
         }
