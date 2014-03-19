@@ -13,7 +13,7 @@ import java.util.LinkedHashSet;
  * @author billk
  * @version Februray 2013
  */
-public class ExampleSet
+public class ExampleSet implements Cloneable
 {
 
     private String[] features;
@@ -196,6 +196,20 @@ public class ExampleSet
         }
 
         return buffer;
+    }
+
+    @Override
+    public ExampleSet clone()
+    {
+        try
+        {
+            return (ExampleSet) super.clone();
+        }
+        catch (CloneNotSupportedException ex)
+        {
+            System.err.println(ex);
+            return null;
+        }
     }
 
 }

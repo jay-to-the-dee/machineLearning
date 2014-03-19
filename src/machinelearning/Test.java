@@ -77,9 +77,7 @@ public class Test
             //System.out.println("currentId:" + currentIteration.getId() + "\tparentId:" + parent.getId());
             //System.out.println(feat + ": " + currentFeatValue);
             UniqueStringEdge edgeString = new UniqueStringEdge(feat + ": " + currentFeatValue);
-            
-            System.out.println(edgeString.hashCode());
-            
+                        
             g.addEdge(currentIteration, parent, edgeString);
 
         }
