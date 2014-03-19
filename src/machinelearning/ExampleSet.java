@@ -2,8 +2,8 @@ package machinelearning;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
+import java.util.Map.Entry;
 
 /**
  * ExampleSet: class for representing set of train or test examples (labelled
@@ -188,14 +188,26 @@ public class ExampleSet implements Cloneable
 
         buffer += size + " TOTAL   \n";
 
-        for (String label : labels)
+        for (Entry<String, Float> entry : labelProbabilityMap().entrySet())
         {
-            ExampleSet ex = getExamples(label);
-            buffer += label + ": ";//+ ex.size() + " : ";
-            buffer += (float) ex.size() / size() * 100 + "%   \n";
+            buffer += entry.getKey() + ": ";//+ ex.size() + " : ";
+            buffer += (float) entry.getValue() * 100 + "%   \n";
         }
 
         return buffer;
+    }
+
+    public HashMap<String, Float> labelProbabilityMap()
+    {
+        HashMap<String, Float> probabilityMap = new HashMap<>();
+
+        for (String label : labels)
+        {
+            ExampleSet ex = getExamples(label);
+            probabilityMap.put(label, (float) ex.size() / size());
+        }
+
+        return probabilityMap;
     }
 
     @Override
