@@ -5,6 +5,7 @@ import org.jgrapht.graph.*;
 
 public class Test
 {
+    private final static int MAX_DEPTH = 2;
 
     private final String file = "./DataSets/CarEvaluation/car.data.txt";
     private Stack<String> feats;
@@ -77,7 +78,7 @@ public class Test
             //System.out.println("currentId:" + currentIteration.getId() + "\tparentId:" + parent.getId());
             //System.out.println(feat + ": " + currentFeatValue);
             UniqueStringEdge edgeString = new UniqueStringEdge(feat + ": " + currentFeatValue);
-                        
+
             g.addEdge(currentIteration, parent, edgeString);
 
         }
@@ -90,7 +91,7 @@ public class Test
      }*/
     private void addFeatToGraph(ExampleSet parent, Stack<String> featStack)
     {
-        if (featStack.size() < 5)
+        if (featStack.size() <= feats.size() - MAX_DEPTH)
         {
             return; //End this recursion NOW!!
         }
