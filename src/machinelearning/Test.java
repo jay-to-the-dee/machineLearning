@@ -52,60 +52,52 @@ public class Test
         //System.out.println(examples.size());
         g.addVertex(examples);
 
-        addFeatToGraph(examples, feats, featToNewValueStack(feats.peek()));
+        //LinkedHashSet<ExampleSet> exampleSet = new LinkedHashSet<>();
+        addFeatToGraph(examples);
+
+        doSplitAndReturnNewParents(examples, "maint");
 
         //Visualise what we've added so far
         JGraphFrame jGraphFrame = new JGraphFrame(g);
     }
 
-    private Stack<String> featToNewValueStack(String feat)
+    private Set<ExampleSet> doSplitAndReturnNewParents(ExampleSet parent, String feat)
     {
-        Stack<String> valueStack = new Stack<>();
-
-        LinkedHashSet<String> allCurrentFeatValues = values.get(feat);
+        Set<ExampleSet> parentSet = new LinkedHashSet<>();
+        Set<String> allCurrentFeatValues = values.get(feat);
 
         for (String currentFeatValue : allCurrentFeatValues)
         {
-            valueStack.push(currentFeatValue);
-        }
+            ExampleSet currentIteration = parent.getExamples(feat, currentFeatValue);
 
-        return valueStack;
+            parentSet.add(currentIteration);
+
+            g.addVertex(currentIteration);
+            g.addEdge(parent, currentIteration, feat + ": " + currentFeatValue);
+
+        }
+        return parentSet;
     }
 
-    private void addFeatToGraph(ExampleSet parent, Stack<String> featStack, Stack<String> valueStack)
+    /*private void addFeatToGraph(Set<ExampleSet> parents, Iterator<Set<ExampleSet>> i, Stack<String> featStack)
+     {
+
+     }*/
+    private void addFeatToGraph(ExampleSet parent)
     {
-        if (valueStack.isEmpty())
+        if (feats.size() < 4)
         {
-            //Advance to next Feature
-            String newFeat = null;
-            try
-            {
-                newFeat = featStack.pop();
-            }
-            catch (EmptyStackException e)
-            {
-                return;
-            }
-            valueStack = featToNewValueStack(newFeat);
-            addFeatToGraph(parent, featStack, valueStack);
-            return;
+            return; //End this recursion NOW!!
         }
 
-        if (featStack.size() < 6)
+        Set<ExampleSet> parents = doSplitAndReturnNewParents(parent, feats.pop());
+        Iterator i = parents.iterator();
+        for (ExampleSet nextParent : parents)
         {
-            //End of recursion
-            return;
+            addFeatToGraph(nextParent);
         }
 
-        String newValue = valueStack.pop();
-
-        ExampleSet currentIteration = parent.getExamples(featStack.peek(), newValue);
-
-        g.addVertex(currentIteration);
-        g.addEdge(parent, currentIteration, featStack.peek() + ": " + newValue);
-
-        addFeatToGraph(parent, featStack, valueStack);
-
+        //feats.pop();
     }
 
 }
