@@ -11,14 +11,14 @@ public class Test
     private Stack<String> labels;
     private HashMap<String, LinkedHashSet<String>> values;
 
-    private SimpleGraph<ExampleSet, String> g;
+    private SimpleGraph<ExampleSet, UniqueStringEdge> g;
 
     public Test()
     {
         feats = new Stack();
         labels = new Stack();
 
-        g = new SimpleGraph<>(String.class);
+        g = new SimpleGraph<>(UniqueStringEdge.class);
     }
 
     /**
@@ -52,13 +52,14 @@ public class Test
         //System.out.println(examples.size());
         g.addVertex(examples);
 
-        //LinkedHashSet<ExampleSet> exampleSet = new LinkedHashSet<>();
-        addFeatToGraph(examples);
+        LinkedHashSet<ExampleSet> exampleSet = new LinkedHashSet<>();
+        addFeatToGraph(examples, feats);
 
-        doSplitAndReturnNewParents(examples, "maint");
-
+        //doSplitAndReturnNewParents(examples, feats.);
         //Visualise what we've added so far
         JGraphFrame jGraphFrame = new JGraphFrame(g);
+
+        //System.out.println(g.toString());
     }
 
     private Set<ExampleSet> doSplitAndReturnNewParents(ExampleSet parent, String feat)
@@ -68,12 +69,18 @@ public class Test
 
         for (String currentFeatValue : allCurrentFeatValues)
         {
-            ExampleSet currentIteration = parent.getExamples(feat, currentFeatValue);
+            ExampleSet currentIteration = parent.getExamples(feat, currentFeatValue); //Split from parent
 
             parentSet.add(currentIteration);
 
             g.addVertex(currentIteration);
-            g.addEdge(parent, currentIteration, feat + ": " + currentFeatValue);
+            //System.out.println("currentId:" + currentIteration.getId() + "\tparentId:" + parent.getId());
+            //System.out.println(feat + ": " + currentFeatValue);
+            UniqueStringEdge edgeString = new UniqueStringEdge(feat + ": " + currentFeatValue);
+            
+            System.out.println(edgeString.hashCode());
+            
+            g.addEdge(currentIteration, parent, edgeString);
 
         }
         return parentSet;
@@ -83,21 +90,19 @@ public class Test
      {
 
      }*/
-    private void addFeatToGraph(ExampleSet parent)
+    private void addFeatToGraph(ExampleSet parent, Stack<String> featStack)
     {
-        if (feats.size() < 4)
+        if (featStack.size() < 5)
         {
             return; //End this recursion NOW!!
         }
 
-        Set<ExampleSet> parents = doSplitAndReturnNewParents(parent, feats.pop());
-        Iterator i = parents.iterator();
+        Set<ExampleSet> parents = doSplitAndReturnNewParents(parent, featStack.pop());
+
         for (ExampleSet nextParent : parents)
         {
-            addFeatToGraph(nextParent);
+            addFeatToGraph(nextParent, (Stack<String>) featStack.clone()); //Split from featStack
         }
-
-        //feats.pop();
     }
 
 }
