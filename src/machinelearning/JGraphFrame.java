@@ -1,5 +1,3 @@
-/*
- */
 package machinelearning;
 
 import java.awt.Dimension;
